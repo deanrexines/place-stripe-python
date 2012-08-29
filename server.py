@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from flask import Flask, render_template, request, redirect
 import requests
 
@@ -15,6 +17,8 @@ def index():
 def authorize():
   site = app.config['SITE'] + app.config['AUTHORIZE_URI']
   url = site + '?response_type=code&scope=read_write&client_id=%s' % app.config['CLIENT_ID']
+
+  # Redirect to Stripe /oauth/authorize endpoint
   return redirect(url)
 
 @app.route('/oauth/callback')
@@ -26,7 +30,11 @@ def callback():
           'code': code}
 
   url = app.config['SITE'] + app.config['TOKEN_URI']
+
+  # Make /oauth/token endpoint POST request
   resp = requests.post(url, params=data, headers=header)
+
+  # Grab access_token (use this as your user's API key)
   token = resp.json.get('access_token')
   return render_template('callback.html', token=token)
 
