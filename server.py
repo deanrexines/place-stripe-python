@@ -30,7 +30,8 @@ def callback():
   header = {'Authorization': 'Bearer %s' % app.config['API_KEY']}
   data   = {'grant_type': 'authorization_code',
             'client_id': app.config['CLIENT_ID'],
-            'code': code}
+            'code': code
+           }
 
   # Make /oauth/token endpoint POST request
   url = app.config['SITE'] + app.config['TOKEN_URI']
