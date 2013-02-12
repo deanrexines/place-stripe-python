@@ -15,9 +15,10 @@ def index():
 @app.route('/authorize')
 def authorize():
   site   = app.config['SITE'] + app.config['AUTHORIZE_URI']
-  params = {'response_type': 'code',
-            'scope': 'read_write',
-            'client_id': app.config['CLIENT_ID']
+  params = {
+             'response_type': 'code',
+             'scope': 'read_write',
+             'client_id': app.config['CLIENT_ID']
            }
 
   # Redirect to Stripe /oauth/authorize endpoint
@@ -27,15 +28,16 @@ def authorize():
 @app.route('/oauth/callback')
 def callback():
   code   = request.args.get('code')
-  header = {'Authorization': 'Bearer %s' % app.config['API_KEY']}
-  data   = {'grant_type': 'authorization_code',
+  data   = {
+            'client_secret': app.config['API_KEY'],
+            'grant_type': 'authorization_code',
             'client_id': app.config['CLIENT_ID'],
             'code': code
            }
 
   # Make /oauth/token endpoint POST request
   url = app.config['SITE'] + app.config['TOKEN_URI']
-  resp = requests.post(url, params=data, headers=header)
+  resp = requests.post(url, params=data)
 
   # Grab access_token (use this as your user's API key)
   token = resp.json.get('access_token')
