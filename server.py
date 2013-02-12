@@ -29,10 +29,10 @@ def authorize():
 def callback():
   code   = request.args.get('code')
   data   = {
-            'client_secret': app.config['API_KEY'],
-            'grant_type': 'authorization_code',
-            'client_id': app.config['CLIENT_ID'],
-            'code': code
+             'client_secret': app.config['API_KEY'],
+             'grant_type': 'authorization_code',
+             'client_id': app.config['CLIENT_ID'],
+             'code': code
            }
 
   # Make /oauth/token endpoint POST request
